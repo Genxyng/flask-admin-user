@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Pengguna</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            background-color: #111;
+            padding-top: 60px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #818181;
+            padding: 15px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f40612;
+        }
+
+        /* Main content container */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Table styles */
+        .table-custom {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        th,
+        td {
+            padding: 15px 20px;
+            text-align: left;
+        }
+
+        /* Override Bootstrap's table header styles */
+        th {
+            background-color: #111111 !important;
+            /* Red background */
+            color: #fff !important;
+            /* White text */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td a,
+        td form button {
+            margin-right: 10px;
+        }
+
+        .btn-sm {
+            font-size: 14px;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        /* Form style */
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #f40612, #e74c3c);
+        }
+
+        .form-container h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f40612;
+        }
+
+        .btn-submit {
+            background-color: #f39c12;
+            color: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: #e67e22;
+        }
+
+        /* Responsive Design for Table */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 12px 15px;
+            }
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+
+        /* Center text in the Aksi header */
+        th:last-child {
+            text-align: center;
+        }
+
+        /* Center the action buttons in each row */
+        td:last-child {
+            text-align: center;
+        }
+
+        /* Make sure the table rows have a border between columns */
+        th,
+        td {
+            border-right: 1px solid #ddd;
+            /* Add border to the right of each cell */
+        }
+
+        /* Remove the border from the last cell in each row */
+        td:last-child,
+        th:last-child {
+            border-right: none;
+        }
+
+        /* Ensure action buttons are the same size */
+        td form button {
+            width: 70px;
+            /* Set width for buttons */
+            height: 40px;
+            /* Set fixed height */
+            font-size: 14px;
+            /* Consistent font size */
+            margin-right: 10px;
+            /* Space between the buttons */
+            display: inline-block;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        /* Optional: improve spacing and appearance for buttons */
+        td form {
+            display: inline-block;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/users">Kelola Pengguna</a>
+        <a href="/admin/movies">Kelola Film</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Kelola Pengguna</h2>
+
+        <!-- Table with Bootstrap Styling -->
+        <table class="table table-custom">
+            <thead>
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_user', user_id=user['_id']) }}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ url_for('delete_user', user_id=user['_id']) }}" method="post"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap 5 JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

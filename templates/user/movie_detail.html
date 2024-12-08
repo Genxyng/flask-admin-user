@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movies.title }} - Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* Gradient hitam di kiri dan gambar di kanan */
+            background: linear-gradient(to left, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 80%, rgba(0, 0, 0, 1) 100%),
+            url("{{ url_for('static', filename='background.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: transparent;
+        }
+
+        .movie-poster {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .footer {
+            padding: 2rem;
+            background-color: #000;
+            text-align: center;
+        }
+
+        .comment-box {
+            background-color: #242424;
+            border-radius: 10px;
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+
+        .comment-box p {
+            font-size: 1rem;
+            color: #aaa;
+        }
+
+        .comment-box .user-comment {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-box .comment-date {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fw-bold" href="/movies">MyMovies</a>
+            <div class="ms-auto">
+                <!-- Tombol Logout -->
+                <a href="/logout" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Movie Detail -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename=movies.cover_image) }}" alt="{{ movies.title }}"
+                    class="movie-poster">
+            </div>
+            <div class="col-md-6">
+                <h1>{{ movies.title }}</h1>
+                <p><strong>Year:</strong> {{ movies.year }}</p>
+                <p><strong>Director:</strong> {{ movies.director }}</p>
+                <p><strong>Cast:</strong> {{ movies.cast }}</p>
+                <p><strong>Genre:</strong> {{ movies.category }}</p>
+                <p><strong>Description:</strong></p>
+                <p>{{ movies.description }}</p>
+                <a href="/" class="btn btn-danger mt-3">Back to Movies</a>
+            </div>
+        </div>
+
+        <!-- Comment Form -->
+        <div class="my-5">
+            <h4>Leave a Comment</h4>
+            <form method="POST">
+                <textarea name="comment" class="form-control" rows="4" placeholder="Write your comment here..."
+                    required></textarea>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+        </div>
+
+        <!-- Display Comments -->
+        <div class="my-5">
+            <h4>Comments</h4>
+            {% for comment in comments %}
+            <div class="comment-box">
+                <!-- Menampilkan user_id dan mencari nama pengguna -->
+                <p class="comment-user">
+                    <strong>{{ comment.user_id }} :</strong>
+                    <!-- Menampilkan user_id -->
+                </p>
+
+                <!-- Menampilkan komentar -->
+                <p class="user-comment">{{ comment.comment }}</p>
+
+                <!-- Menampilkan tanggal posting komentar -->
+                <p class="comment-date">Posted on: {{ comment.date.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+            {% else %}
+            <p class="text-muted">No comments yet.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 MyMovies. All rights reserved.</p>
+        <p><a href="#" class="text-white text-decoration-none">Privacy</a> | <a href="#"
+                class="text-white text-decoration-none">Terms</a> | <a href="#"
+                class="text-white text-decoration-none">Contact Us</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

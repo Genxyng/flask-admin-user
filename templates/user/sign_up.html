@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to left, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 80%, rgba(0, 0, 0, 1) 100%),
+            url("{{ url_for('static', filename='background.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-card h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .btn-custom {
+            background-color: #e50914;
+            border-color: #e50914;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .btn-custom:hover {
+            background-color: #f40612;
+            border-color: #f40612;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .footer-text a {
+            color: #e50914;
+            text-decoration: none;
+        }
+
+        .alert-danger {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .netflix-logo {
+            display: block;
+            margin: 0 auto 30px;
+            width: 150px;
+        }
+
+        /* Styling untuk input group dan tombol cek di sampingnya */
+        .input-group {
+            width: 100%;
+        }
+
+        .input-group .btn-check-username {
+            background-color: #e50914;
+            border-color: #e50914;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .input-group .btn-check-username:hover {
+            background-color: #f40612;
+            border-color: #f40612;
+        }
+
+        .username-status {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="card login-card">
+
+            <h2>Sign Up</h2>
+
+            {% if msg %}
+            <div class="alert alert-danger" role="alert">
+                {{ msg }}
+            </div>
+            {% endif %}
+
+
+            <form action="{{ url_for('sign_up') }}" method="POST" id="signup-form">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <input type="text" name="username_give" id="username" class="form-control" required>
+                        <button type="button" class="btn btn-check-username" id="checkUsernameBtn">Cek</button>
+                    </div>
+                    <div id="username-status" class="username-status"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password_give" id="password" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" name="name_give" id="name" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-custom w-100">Sign Up</button>
+            </form>
+
+            <p class="footer-text" style="font-weight: bold;">Sudah punya akun? <a href="{{ url_for('login') }}"
+                    style="font-weight: bold;">Login di sini</a></p>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('checkUsernameBtn').addEventListener('click', function () {
+            let username = document.getElementById('username').value;
+            let statusDiv = document.getElementById('username-status');
+
+            if (username === "") {
+                statusDiv.innerHTML =
+                    "<div class='alert alert-warning'>Harap masukkan username untuk pengecekan.</div>";
+                return;
+            }
+
+            fetch("/check_username/" + username)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        statusDiv.innerHTML =
+                            "<div class='alert alert-danger'>Username sudah terdaftar.</div>";
+                    } else {
+                        statusDiv.innerHTML = "<div class='alert alert-success'>Username tersedia.</div>";
+                    }
+                })
+                .catch(error => {
+                    statusDiv.innerHTML =
+                        "<div class='alert alert-danger'>Terjadi kesalahan, coba lagi nanti.</div>";
+                });
+        });
+    </script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            background-color: #111;
+            padding-top: 60px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #818181;
+            padding: 10px 15px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f40612;
+        }
+
+        /* Main content container */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            width: 30%;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-card h3 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* SVG Circle Progress */
+        .circle-progress {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#f40612 {{ user_count }}%, #eee {{ user_count }}% 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px auto;
+        }
+
+        /* Chart Section */
+        .chart-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/users">Kelola Pengguna</a>
+        <a href="/admin/movies">Kelola Film</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome to the Admin Dashboard. Use the sidebar to manage users, films, and reviews.</p>
+
+        <!-- Stats Row -->
+        <div class="stats-container">
+            <!-- Users Count Card -->
+            <div class="stat-card">
+                <div class="circle-progress">
+                    <span>{{ user_count }}</span>
+                </div>
+                <p>Users</p>
+            </div>
+
+            <!-- Movies Count Card -->
+            <div class="stat-card">
+                <div class="circle-progress">
+                    <span>{{ movie_count }}</span>
+                </div>
+                <p>Movies</p>
+            </div>
+
+            <!-- Reviews Count Card -->
+            <div class="stat-card">
+                <div class="circle-progress">
+                    <span>{{ review_count }}</span>
+                </div>
+                <p>Reviews</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript CDN for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Script for Pie Chart -->
+    <script>
+        var ctx = document.getElementById('userStatsChart').getContext('2d');
+        var userStatsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Users', 'Movies', 'Reviews'],
+                datasets: [{
+                    label: 'Data Statistics',
+                    data: [{{ user_count }}, {{ movie_count }}, {{ review_count }}],
+                    backgroundColor: ['#f40612', '#1e90ff', '#32cd32'],
+                    borderColor: ['#f40612', '#1e90ff', '#32cd32'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
