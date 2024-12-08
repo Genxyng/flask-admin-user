@@ -183,6 +183,14 @@ def admin_dashboard():
 
     # Mengambil data jumlah film
     movie_count = db.movies.count_documents({})
+    
+    # Hitung jumlah komentar dari semua film
+    comment_count_pipeline = [
+        {"$unwind": {"path": "$comments", "preserveNullAndEmptyArrays": True}},  # Membongkar array comments
+        {"$group": {"_id": None, "total_comments": {"$sum": 1}}},  # Menghitung jumlah total
+    ]
+    comment_count_result = list(db.movies.aggregate(comment_count_pipeline))
+    total_comments = comment_count_result[0]["total_comments"] if comment_count_result else 0
 
     # Mengambil data jumlah review
     review_count = db.reviews.count_documents({})
@@ -192,7 +200,7 @@ def admin_dashboard():
         users=users,
         user_count=user_count,
         movie_count=movie_count,
-        review_count=review_count,
+        total_comments=total_comments,
     )
 
 
